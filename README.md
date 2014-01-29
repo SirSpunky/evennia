@@ -1,29 +1,33 @@
-Evennia MUD/MU\* Creation System
-================================
-
+Evennia
+-----------------------
 *Evennia* is an open-source Python-based MUD/MU\* server/codebase using modern technologies. Evennia allows creators to design and flesh out text-based massively-multiplayer online games with great freedom.
 
 http://www.evennia.com is the main hub tracking all things Evennia. The documentation wiki is found [here](https://github.com/evennia/evennia/wiki).
 
-Features and Philosophy
+SirSpunky's MUD
 -----------------------
+SirSpunky's MUD is heavily based on the Evennia code base. The goal is to build a complete text-based game engine in a fantasy setting with powerful in-game building tools for building the game world and objects.
 
-Evennia aims to supply a bare-bones MU\* codebase that allows vast flexibility for game designers while taking care of all the gritty networking and database-handling behind the scenes. Evennia offers an easy API for handling persistent objects, time-dependent scripting and all the other low-level features needed to create a MU\*. The idea is to allow the mud-coder to concentrate solely on designing the parts and systems of the mud that makes it uniquely fit their ideas.
+Screenshots: http://i.imgur.com/sqtHRGv.png
 
-Coding in Evennia is primarily done by normal Python modules, making the codebase extremely flexible. The code is heavily documented and you use Python classes to represent your objects, scripts and players. The database layer is abstracted away.
+Feature list:
+* Rooms
+    * Basic exits restricted to north, east, south, west, up and down for easier orientation.
+    * Coordinates (x, y and z) have been added to rooms for additional functionality.
+    * In-game map using the "map" command.
+    * Custom formatting of room descriptions when using the "look" command, including a mini-map.
+* Objects
+    * Weight-based object and container system. Containers can contain any levels of sub-containers and objects, as long as they haven't reached their maximum contents weight.
+    * Containers and exits support opening and closing, to create things like chests and doors.
+* Global weather and time system with random levels of clouds density, wind speed and precipitation. Time is shown through descriptions of the sun position rather than by printing time.
+* Commands
+    * Prefix for admin commands changed to "." for easier typing.
+* Building:
+    * In-game object template database for easy creation and spawning of common objects and characters. See the ".db" command.
+    * Random generation of whole areas using the ".generate" command. Random areas are setup through the ".area" command, using rooms defined with the ".room" command.
+    * Common scripts such as random movement and random messages are configured through normal attributes.
+    * Speech scripts triggered through keywords can also be configured through attributes.
+    * Common scripts can include keywords such as $random_character, which will automatically select a character in the same room by random, allowing your NPC:s to address or target random characters in speech or actions.
 
-Evennia offers extensive connectivity options. A single server instance may offer connections over Telnet, SSH, SSL and HTTP. The latter is possible since Evennia is also its own web server: A default website as well as a browser-based comet-style mud client comes as part of the package ([screenshot](https://github.com/evennia/evennia/wiki/Screenshot)). Due to our Django and Twisted foundations, web integration is a snap since the same code that powers the game may also be used to run its web presence (you may use a third-party webserver too if you prefer though). Evennia in-game channels can also be interlinked with external IRC and IMC2 channels so players can chat with people "outside" the game.
-
-Whereas Evennia is intended to be customized to almost any level you like, we do offer some defaults you can build from. The code base comes with basic classes for objects, exits, rooms and characters. There is also a default command set for handling administration, building, chat channels, poses and so on. This is enough to run a 'Talker' or some other social-style game out of the box. Stock Evennia is however deliberately void of any game-world-specific systems. So you won't find any AI codes, mobs, skill systems, races or combat stats in the default distribution (we might expand our contributions folder with optional plugins in the future though).
-
-If this piqued your interest, there is also a [lengthier introduction](https://github.com/evennia/evennia/wiki/Evennia-Introduction) to Evennia to read.
-
-Current Status
---------------
-
-The codebase is currently in **Beta**. While development continues, Evennia is already stable enough to be suitable for prototyping and development of your own games.
-
-More Information
-----------------
-
-To learn how to get your hands on the code base, the [Getting started](https://github.com/evennia/evennia/wiki/Getting-Started) page is the way to go. Otherwise you could browse the [Documentation wiki](https://github.com/evennia/evennia/wiki) or why not come join the [Evennia Community](http://www.evennia.com). Welcome! 
+Todo:
+A lot.
