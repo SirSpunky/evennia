@@ -6,14 +6,14 @@ http://www.evennia.com is the main hub tracking all things Evennia. The document
 
 SirSpunky's MUD
 -----------------------
-SirSpunky's MUD is heavily based on the Evennia code base. The goal is to build a complete text-based game engine in a fantasy setting with powerful in-game building tools for building the game world and objects.
+Heavily based on the Evennia codebase, *SirSpunky's [MUD](http://en.wikipedia.org/wiki/MUD)* aims to provide a complete text-based game engine in a fantasy setting with powerful in-game building tools for building the game world and objects.
 
 Screenshots: http://imgur.com/a/B9sfo#0
 
 Feature list:
 * Rooms
     * Exits optimized for north, east, south, west, up and down for easier orientation.
-    * Coordinates (x, y and z) have been added to rooms for additional functionality.
+    * Coordinates (x, y and z) have been added to rooms for extra functionality.
     * In-game map using the "map" command.
     * Custom formatting of room descriptions when using the "look" command, including a mini-map.
 * Objects
