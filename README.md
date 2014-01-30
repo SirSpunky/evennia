@@ -8,7 +8,7 @@ SirSpunky's MUD
 -----------------------
 Heavily based on the Evennia codebase, *SirSpunky's [MUD](http://en.wikipedia.org/wiki/MUD)* aims to provide a complete text-based game engine in a fantasy setting with powerful in-game building tools for building the game world and objects.
 
-Screenshots: http://imgur.com/a/B9sfo#0
+Screenshots: http://imgur.com/a/uN5mB#0
 
 Feature list:
 * Rooms
