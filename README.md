@@ -23,7 +23,7 @@ Feature list:
 * Commands
     * Prefix for admin commands changed to "." for easier typing.
 * Building:
-    * In-game object template database for easy creation and spawning of common objects and characters. See the ".db" command.
+    * In-game object database for storing and spawning common objects and characters. See the ".db" command.
     * Random generation of whole areas using the ".generate" command. Random areas are setup through the ".area" command, using rooms defined with the ".room" command.
     * Common scripts such as random movement and random messages are configured through normal attributes on objects and characters.
     * Includes speech script triggered by keywords that can also be configured through attributes.
