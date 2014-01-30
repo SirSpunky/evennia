@@ -76,13 +76,13 @@ class CmdWeather(MuxCommand):
         elif wind_speed == 3:
             wind_string = "There's a strong breeze in the air."
         elif wind_speed == 4:
-            wind_string = "A gale is blowing. The wind speeds are strong."
+            wind_string = "A gale is blowing, wind speeds are strong."
         elif wind_speed == 5:
             wind_string = "Storm winds are raging."
         elif wind_speed == 6:
             wind_string = "Violent storm winds are howling in the air."
         elif wind_speed == 7:
-            wind_string = "There's a hurricane. The wind strength is incredible."
+            wind_string = "A hurricane is raging. The wind strength is incredible."
         
         string = "%s %s" % (cloud_string, wind_string)
 
