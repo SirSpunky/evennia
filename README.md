@@ -8,11 +8,11 @@ SirSpunky's MUD
 -----------------------
 SirSpunky's MUD is heavily based on the Evennia code base. The goal is to build a complete text-based game engine in a fantasy setting with powerful in-game building tools for building the game world and objects.
 
-Screenshots: http://i.imgur.com/sqtHRGv.png
+Screenshots: http://imgur.com/a/B9sfo#0
 
 Feature list:
 * Rooms
-    * Basic exits restricted to north, east, south, west, up and down for easier orientation.
+    * Exits optimized for north, east, south, west, up and down for easier orientation.
     * Coordinates (x, y and z) have been added to rooms for additional functionality.
     * In-game map using the "map" command.
     * Custom formatting of room descriptions when using the "look" command, including a mini-map.
@@ -25,8 +25,8 @@ Feature list:
 * Building:
     * In-game object template database for easy creation and spawning of common objects and characters. See the ".db" command.
     * Random generation of whole areas using the ".generate" command. Random areas are setup through the ".area" command, using rooms defined with the ".room" command.
-    * Common scripts such as random movement and random messages are configured through normal attributes.
-    * Speech scripts triggered through keywords can also be configured through attributes.
+    * Common scripts such as random movement and random messages are configured through normal attributes on objects and characters.
+    * Includes speech script triggered by keywords that can also be configured through attributes.
     * Common scripts can include keywords such as $random_character, which will automatically select a character in the same room by random, allowing your NPC:s to address or target random characters in speech or actions.
 
 Todo:
