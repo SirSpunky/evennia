@@ -48,7 +48,7 @@ class Object(DefaultObject):
         from game.gamesrc.objects.exit import Exit
         from game.gamesrc.objects.room import Room
         from game.gamesrc.utils.get_map import get_map
-
+        
         # Only for exits:
         if self.destination:
             string = "\nYou peek " + self.key + ", and see..."
@@ -77,6 +77,8 @@ class Object(DefaultObject):
             elif self.is_container:
                 string += " (container)"
         
+        
+        
         # Description
         desc = self.db.desc
         if desc:
@@ -84,15 +86,18 @@ class Object(DefaultObject):
                 string += "\n"
             string += "\n%s" % desc
         
+        
+        
         # Room
         if isinstance(self, Room):
             # Draw mini-map.
-            string += "\n\n" + get_map(pobject, 10, 5)
+            #string += "\n\n" + get_map(pobject, 10, 5)
             
             # Get and identify all visible containing objects
             visible_contents = (con for con in self.contents if con != pobject and
                                                         con.access(pobject, "view"))
             exits, characters, objects = [], [], []
+            
             for obj in visible_contents:
                 if isinstance(obj, Exit):
                     # Add exit direction and name of destination room
@@ -114,7 +119,6 @@ class Object(DefaultObject):
                         if len(chars_in_exit) > 0:
                             exit_desc += " {x({n" + ", ".join(sorted(chars_in_exit)) + "{x){n"
                     
-                    
                     exits.append(exit_desc)
                 elif isinstance(obj, Character):
                     characters.append(obj.name)
@@ -131,7 +135,7 @@ class Object(DefaultObject):
             # Draw objects/characters
             if characters or objects:
                 string += "\n\n" + ", ".join(sorted(characters) + sorted(objects))
-        
+            
         # Normal objects
         elif not isinstance(self, Character):
             # Description for open/close
