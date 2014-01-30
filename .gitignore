@@ -1,3 +1,7 @@
+# SirSpunky's extras
+*.bat
+*.old
+
 *.py[cod]
 
 # C extensions
