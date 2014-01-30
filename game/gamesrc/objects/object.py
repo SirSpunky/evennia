@@ -295,8 +295,11 @@ class Object(DefaultObject):
         if not exit:
             self.location.msg_contents("%s arrives." % self.name_upper, exclude=self)
             return
-
-        string = "%s arrives from the %s." % (self.name_upper, exit.name)
+        
+        if exit.key == 'up' or exit.key == 'down':
+            string = "%s arrives from %s." % (self.name_upper, exit.name)
+        else:
+            string = "%s arrives from the %s." % (self.name_upper, exit.name)
         self.location.msg_contents(string, exclude=self)
 
     #------------------- Weight -------------------#

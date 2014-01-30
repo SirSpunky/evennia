@@ -180,7 +180,7 @@ class CmdRoom(MuxCommand):
                     objects = ""
                 table.add_row([key, name, max_exits, objects])
             
-            self.caller.msg("Rooms:\n\n%s" % table, raw=True)
+            self.caller.msg("Rooms:\n\n%s" % table)
         elif command == "delete":
             if not target:
                 self.caller.msg("Which room do you wish to delete?")
