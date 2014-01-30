@@ -40,7 +40,7 @@ Remove and add global script:
         self.db.precipitation_type = "rain" # Current precipitation type: rain, snow or hail
         
         self.db.cloud_change_rate = 0.5 # The higher it is, changes will happen more often.
-        self.db.cloud_increase_rate = 1.05 # The higher it is, increases in strength will happen more often.
+        self.db.cloud_increase_rate = 1 # The higher it is, increases in strength will happen more often.
         self.db.wind_change_rate = 1 # The higher it is, changes will happen more often.
         self.db.wind_increase_rate = 1 # The higher it is, increases in strength will happen more often.
         self.db.precipitation_change_rate = 1 # The higher it is, changes will happen more often.

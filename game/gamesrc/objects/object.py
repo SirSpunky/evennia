@@ -84,9 +84,9 @@ class Object(DefaultObject):
                 string += "\n"
             string += "\n%s" % desc
         
-        # Display contents
+        # Room
         if isinstance(self, Room):
-            # Draw map.
+            # Draw mini-map.
             string += "\n\n" + get_map(pobject, 10, 5)
             
             # Get and identify all visible containing objects
@@ -122,12 +122,17 @@ class Object(DefaultObject):
                     objects.append(obj.name)
                     #things.append("%cy" + key[0].upper() + key[1:] + "{n")
             
+            # Draw exits
             if exits:
                 #string += "\n\n{wExits: {n" + ", ".join(sorted(exits))
                 #string += "\n\n{wExits:\n {n" + "\n ".join(sorted(exits))
                 string += "\n\n{n" + "\n".join(sorted(exits))
+            
+            # Draw objects/characters
             if characters or objects:
                 string += "\n\n" + ", ".join(sorted(characters) + sorted(objects))
+        
+        # Normal objects
         elif not isinstance(self, Character):
             # Description for open/close
             if self.can_open:
@@ -146,7 +151,7 @@ class Object(DefaultObject):
                 else:
                     string += "\n\nIt's empty. It can fit {w%g kg{n." % self.max_contents_weight
 
-
+        # Draw weight
         if self.own_weight > 0:
             if self.is_container:
                 string += "\n\nTotal weight: {w%g kg{n" % self.total_weight
@@ -156,6 +161,7 @@ class Object(DefaultObject):
         
         return string
     
+    # Returns a formatted table of all contents in this object
     def return_contents(self):
         from src.utils import utils, prettytable
         
@@ -235,7 +241,7 @@ class Object(DefaultObject):
         # Todo: If enemy, take action.
         pass
     
-    #------------------- Moving -------------------#
+    #------------------- Movement -------------------#
     def find_exit_between_rooms(self, room1, room2):
         from game.gamesrc.objects.exit import Exit
         
@@ -331,7 +337,7 @@ class Object(DefaultObject):
         else:
             return False
 
-    #------------------- Open -------------------#
+    #------------------- Open/Close -------------------#
     @property
     def can_open(self):
         if self.tags.get("can_open"):
