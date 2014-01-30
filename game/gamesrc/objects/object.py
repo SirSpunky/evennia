@@ -195,12 +195,12 @@ class Object(DefaultObject):
         sessid: optional session target. If sessid=0, the session will
                 default to self.sessid or from_obj.sessid.
         """
-
-        #suffix = "\n\n[ HP 100%  SP 100% ]"
-        suffix = "\n\n>"
-        #suffix = "\n\n{x>{n"
-        #self.dbobj.msg(text=unicode(text.encode('utf-8'))+suffix, **kwargs)
-        self.dbobj.msg(text=text + suffix, **kwargs)
+        if self.has_player:
+            #suffix = "\n\n[ HP 100%  SP 100% ]"
+            suffix = "\n\n>"
+            #suffix = "\n\n{x>{n"
+            #self.dbobj.msg(text=unicode(text.encode('utf-8'))+suffix, **kwargs)
+            self.dbobj.msg(text=text + suffix, **kwargs)
     
     
     #------------------- Scripts -------------------#
@@ -221,10 +221,6 @@ class Object(DefaultObject):
         for script in self.scripts.all():
             script.stop()
 
-    def delayed_command(self, command):
-        if self.ndb.delayed_command:
-            self.execute_cmd(self.ndb.delayed_command)
-
     #------------------- Hooks -------------------#
     def at_sayto(self, caller, msg):
         if self.db.speech:
@@ -236,7 +232,8 @@ class Object(DefaultObject):
         
     
     def at_after_move(self, source_location):
-        self.execute_cmd('look') # Look around
+        if self.has_player:
+            self.execute_cmd('look') # Look around
         
         # Todo: Look through objects in room. If enemy, take action.
         # Todo: Send hook command to at_object_arrival() to all other objects in room.
@@ -252,8 +249,8 @@ class Object(DefaultObject):
         if not self.location:
             return None
         
-        for obj in room1.contents:
-            if isinstance(obj, Exit) and obj.destination == room2:
+        for obj in room1.exits:
+            if obj.destination == room2:
                 return obj
         return None
 
@@ -305,6 +302,8 @@ class Object(DefaultObject):
         else:
             string = "%s arrives from the %s." % (self.name_upper, exit.name)
         self.location.msg_contents(string, exclude=self)
+        
+        
 
     #------------------- Weight -------------------#
     @property

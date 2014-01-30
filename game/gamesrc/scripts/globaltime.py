@@ -99,7 +99,10 @@ Remove and add script:
             msg = "The last light of day is gone. The night has begun."
 
         if msg:
-            rooms = ev.search_tag("outdoors")
-            for room in rooms:
-                room.msg_contents(msg)
+            # Send message to active players only.
+            from src.server.sessionhandler import SESSIONS
+            for s in SESSIONS.get_sessions():
+                player_object = s.get_puppet()
+                if s.logged_in and player_object and player_object.location.tags.get("outdoors"):
+                    player_object.msg(msg)
 

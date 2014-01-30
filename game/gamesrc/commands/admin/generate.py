@@ -184,15 +184,15 @@ class CmdGenerate(MuxCommand):
         max_rooms = 10
         
         # TEMP FIX FOR DEBUGGING: Destroy all rooms of current zone
-        if zonename:
-            rooms = search.search_tag(zonename)
-            #rooms = search.search_object("untitled room")
-            if rooms:
-                for room in rooms:
-                    #caller.execute_cmd('@destroy %s' % room.dbref)
-                    room.delete()
-                caller.msg("Zone deleted.")
-                return
+        #if zonename:
+        #    rooms = search.search_tag(zonename)
+        #    #rooms = search.search_object("untitled room")
+        #    if rooms:
+        #        for room in rooms:
+        #            #caller.execute_cmd('@destroy %s' % room.dbref)
+        #            room.delete()
+        #        caller.msg("Zone deleted.")
+        #        return
         
         # Find global script
         script_key = "GlobalDatabase"

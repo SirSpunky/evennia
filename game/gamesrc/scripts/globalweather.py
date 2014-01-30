@@ -39,9 +39,9 @@ Remove and add global script:
         self.db.precipitation_level = 0 # Current precipitation level, 0-4
         self.db.precipitation_type = "rain" # Current precipitation type: rain, snow or hail
         
-        self.db.cloud_change_rate = 0.3 # The higher it is, changes will happen more often.
+        self.db.cloud_change_rate = 0.2 # The higher it is, changes will happen more often.
         self.db.cloud_increase_rate = 1 # The higher it is, increases in strength will happen more often.
-        self.db.wind_change_rate = 0.5 # The higher it is, changes will happen more often.
+        self.db.wind_change_rate = 0.2 # The higher it is, changes will happen more often.
         self.db.wind_increase_rate = 1 # The higher it is, increases in strength will happen more often.
         self.db.precipitation_change_rate = 0.5 # The higher it is, changes will happen more often.
         self.db.precipitation_increase_rate = 0 # The higher it is, increases in strength will happen more often. Set automatically depending on cloud density.
@@ -299,10 +299,14 @@ Remove and add global script:
         
         
         # TODO: Tornado. Thunder. Fog.
-        
+        #rooms = ev.search_tag("outdoors")
+
         
         if msg:
-            rooms = ev.search_tag("outdoors")
-            for room in rooms:
-                room.msg_contents(msg)
+            # Send message to active players only.
+            from src.server.sessionhandler import SESSIONS
+            for s in SESSIONS.get_sessions():
+                player_object = s.get_puppet()
+                if s.logged_in and player_object and player_object.location.tags.get("outdoors"):
+                    player_object.msg(msg)
 

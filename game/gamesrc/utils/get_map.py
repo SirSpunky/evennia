@@ -27,14 +27,10 @@ def get_map(caller, map_size_x, map_size_y):
     caller_z = caller.location.db.z
     
     # Define map boundaries
-    #map_size_x = 50
-    #map_size_y = 20
-    #map_size_x = 10
-    #map_size_y = 4
-    map_left_x = caller_x - int(round((map_size_x-1)/2.0)) # We only round in one direction to support map size of 2
     map_right_x = caller_x + (map_size_x-1)/2
-    map_top_y = caller_y + int(round((map_size_y-1)/2.0))
+    map_left_x = map_right_x - (map_size_x - 1)
     map_bottom_y = caller_y - (map_size_y-1)/2
+    map_top_y = map_bottom_y + (map_size_y - 1)
     padding_x = ' '
     
     # Only show map if we know where the caller is.
@@ -49,7 +45,7 @@ def get_map(caller, map_size_x, map_size_y):
     for room in rooms:
         if map_left_x <= room.db.x <= map_right_x and map_bottom_y <= room.db.y <= map_top_y:
             visible_rooms["%sx%s" % (room.db.x, room.db.y)] = room
-        
+    
     
     # Create output.
     rows = []

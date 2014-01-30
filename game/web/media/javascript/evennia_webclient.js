@@ -209,6 +209,7 @@ function msg_display(type, msg){
       });*/
     //msg = msg.replace(/[ ](?!([^<]+)?>)/g, '&nbsp;') // Replace all spaces outside of HTML-tags with &nbsp;
     
+    msg = msg.replace(/\n/g, '<br>') // To make multiple spaces render correctly, replace all double spaces with &nbsp;&nbsp; so spaces don't group.
     msg = msg.replace(/  /g, '&nbsp;&nbsp;') // To make multiple spaces render correctly, replace all double spaces with &nbsp;&nbsp; so spaces don't group.
     
     $("#messagewindow").append(
