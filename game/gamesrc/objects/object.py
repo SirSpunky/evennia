@@ -224,9 +224,7 @@ class Object(DefaultObject):
     #------------------- Hooks -------------------#
     def at_sayto(self, caller, msg):
         if self.db.speech:
-            for phrase in self.db.speech:
-                keyword = phrase[0]
-                answer = phrase[1]
+            for keyword, answer in self.db.speech.iteritems():
                 if msg.lower().find(keyword.lower()) != -1:
                     return utils.delay(1, 'sayto %s = %s' % (caller.key, answer), self.execute_cmd)
         

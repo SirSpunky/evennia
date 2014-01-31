@@ -18,13 +18,14 @@ CHAR_TYPECLASS = settings.BASE_CHARACTER_TYPECLASS
 
 class CmdAttr(ObjManipCommand):
     """
-    @attr - set attributes
+    .attr - set attributes
 
     Usage:
-      @attr <obj>/<attr> = <value>
-      @attr <obj>/<attr> =
-      @attr <obj>/<attr>
-      @attr *<player>/attr = <value>
+      .attr <obj>
+      .attr <obj>/<attr> = <value>
+      .attr <obj>/<attr> =
+      .attr <obj>/<attr>
+      .attr *<player>/attr = <value>
 
     Sets attributes on objects. The second form clears
     a previously set attribute while the last form

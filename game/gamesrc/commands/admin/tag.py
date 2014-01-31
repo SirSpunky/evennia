@@ -15,8 +15,8 @@ class CmdTag(MuxCommand):
       .tag <obj> [= <tag>[:<category>]]
       .tag search <tag>
 
-      @tag[/del] <obj> [= <tag>[:<category>]]
-      @tag/search <tag>
+      .tag[/del] <obj> [= <tag>[:<category>]]
+      .tag/search <tag>
 
     Manipulates and lists tags on objects. Tags allow for quick
     grouping of and searching for objects.  If only <obj> is given,
