@@ -37,6 +37,8 @@ Follow the instructions at https://github.com/evennia/evennia/wiki/Getting-Start
 
 Attributes & tags
 -----------------------
+Attributes are set using the ".attr" command. Tags are set using the ".tag" command. Using in-game help for details.
+
 **Attributes**
 * desc: Description
 * weight: Base weight in kg. Used by all objects. Defaults to 0, which means transparent or infinite, i.e. can never be picked up. Total weight is automatically calculated based on weight and its contents weight.
@@ -47,7 +49,7 @@ Attributes & tags
     * random_messages: A list of random messages. Use "/" to execute command instead, e.g. "/say Hello!" to make a character speak at random. The string "$random_character" will be replaced by the name of a random character in the room.
     * random_message_rate: 0-1. Higher means messages will appear more often.
     * random_movement_rate: 0-1. If > 0, object will move around randomly. Higher means it will move more often.
-    * speech: Speech keywords mapped to answers triggered by using "sayto <character> <keyword>". Example: (('hello', 'Hello there!'), ('bye', 'Good bye, my friend.'))
+    * speech: Speech keywords mapped to answers triggered by using "sayto <character> <keyword>". Example: {"hello": "Hello there!", "bye": "Good bye, my friend."}
 
 **Tags**
 * can_open: Object can be opened or closed. Mainly for objects and exits.
