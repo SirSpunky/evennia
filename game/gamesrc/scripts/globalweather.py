@@ -39,9 +39,9 @@ Remove and add global script:
         self.db.precipitation_level = 0 # Current precipitation level, 0-4
         self.db.precipitation_type = "rain" # Current precipitation type: rain, snow or hail
         
-        self.db.cloud_change_rate = 0.2 # The higher it is, changes will happen more often.
+        self.db.cloud_change_rate = 0.1 # The higher it is, changes will happen more often.
         self.db.cloud_increase_rate = 1 # The higher it is, increases in strength will happen more often.
-        self.db.wind_change_rate = 0.2 # The higher it is, changes will happen more often.
+        self.db.wind_change_rate = 0.1 # The higher it is, changes will happen more often.
         self.db.wind_increase_rate = 1 # The higher it is, increases in strength will happen more often.
         self.db.precipitation_change_rate = 0.5 # The higher it is, changes will happen more often.
         self.db.precipitation_increase_rate = 0 # The higher it is, increases in strength will happen more often. Set automatically depending on cloud density.
@@ -95,6 +95,23 @@ Remove and add global script:
                 msg = "Huge hailstones are crushing down from the skies."
         
         
+        # Wind - Messages
+        if self.db.wind_speed == 3 and random.random() < 0.005:
+            messages = ["A fresh breeze is blowing.", "You feel the wind blowing around you.", "A strong breeze can be felt."]
+            msg = messages[int(random.random() * len(messages))]
+        
+        if self.db.wind_speed == 4 and random.random() < 0.025: # Every 5 minutes on average
+            messages = ["The wind whines around you.", "Strong winds swirl around you.", "A gust of wind stirs the air.", "The wind rumbles as it picks up in strength, only to quiet down again."]
+            msg = messages[int(random.random() * len(messages))]
+
+        if (self.db.wind_speed == 5 or self.db.wind_speed == 6) and random.random() < 0.2:
+            messages = ["Storm winds are howling around you.", "A strong gust of wind almost throws you off-balance.", "Very strong winds are hitting hard against you.", "Storm winds are racing through the air."]
+            msg = messages[int(random.random() * len(messages))]
+
+        if self.db.wind_speed == 7 and random.random() < 0.3:
+            messages = ["Hurricane winds are raging against you.", "Extreme winds are throwing things around.", "Terrible winds are creating havoc around you.", "Hurricane winds are ripping through the air."]
+            msg = messages[int(random.random() * len(messages))]
+
         
         # Cloud density
         if random.random() < 0.025 * self.db.cloud_change_rate:
@@ -205,7 +222,7 @@ Remove and add global script:
             elif self.db.wind_speed == 3:
                 if random.random() < 0.25 * self.db.wind_increase_rate:
                     self.db.wind_speed += 1
-                    msg = "The wind is getting stronger."
+                    #msg = "The wind is getting stronger."
                 else:
                     self.db.wind_speed -= 1
             
@@ -224,16 +241,16 @@ Remove and add global script:
                     msg = "The wind is extremely strong, surpassing a normal storm."
                 else:
                     self.db.wind_speed -= 1
-                    msg = "The wind is weakening. It's no longer storm strength."
+                    msg = "The wind is weakening. It's no longer a storm."
             
             # Violent storm
             elif self.db.wind_speed == 6:
                 if random.random() < 0.05 * self.db.wind_increase_rate:
                     self.db.wind_speed += 1
-                    msg = "Hurricane winds are ripping through the air."
+                    #msg = "Hurricane winds are ripping through the air."
                 else:
                     self.db.wind_speed -= 1
-                    msg = "The wind is weakening, but remains storm strength."
+                    msg = "The wind is weakening, but remains strong."
             
             # Hurricane
             elif self.db.wind_speed == 7:
@@ -241,14 +258,14 @@ Remove and add global script:
                     pass
                 else:
                     self.db.wind_speed -= 1
-                    msg = "The wind is weakening, but is still violent."
+                    msg = "The wind is weakening, but remains very strong."
         
         
         
         # Precipitation
         if random.random() < 0.025 * self.db.precipitation_change_rate: # Every 5th minute            
             if self.db.precipitation_level == 0:
-                if random.random() < (0.1 + self.db.wind_speed / 30) * self.db.precipitation_increase_rate:
+                if random.random() < (0.1 + self.db.wind_speed / 50) * self.db.precipitation_increase_rate:
                     self.db.precipitation_level += 1
             
             elif self.db.precipitation_level == 1:
