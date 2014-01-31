@@ -44,136 +44,6 @@ class CmdGenerate(MuxCommand):
     
     
     
-    def create_room(self, direction, room_from):
-        zonename = self.rhs
-        areakey = self.areakey
-        roomname = "untitled room"
-        desc = ""
-        max_exits = 4
-        valid_exits = ['n', 's', 'w', 'e']
-        tags = []
-        objects = {}
-        limit = 0
-        attr = {}
-        
-        # All random room generation stuff
-        roomkey = self.random_roomkeys[int(random.random() * len(self.random_roomkeys))] # Find random room key
-        room_data = self.rooms[roomkey]
-        
-        if "name" in room_data:
-            if isinstance(room_data["name"], basestring):
-                roomname = room_data["name"]
-            else:
-                roomname = room_data["name"][int(random.random() * len(room_data["name"]))] # Find random from list
-        
-        if "desc" in room_data:
-            if isinstance(room_data["desc"], basestring):
-                desc = room_data["desc"]
-            else:
-                desc = room_data["desc"][int(random.random() * len(room_data["desc"]))] # Find random from list
-        
-        if "max_exits" in room_data:
-            max_exits = room_data["max_exits"]
-        
-        if "valid_exits" in room_data:
-            valid_exits = room_data["valid_exits"]
-        
-        if "tags" in room_data:
-            tags = room_data["tags"]
-        
-        if "objects" in room_data:
-            objects = room_data["objects"]
-        
-        if "limit" in room_data:
-            limit = room_data["limit"]
-        
-        typeclass = settings.BASE_ROOM_TYPECLASS
-        lockstring = "control:id(%s) or perm(Immortals); delete:id(%s) or perm(Wizards); edit:id(%s) or perm(Wizards)"
-        lockstring = lockstring % (self.caller.dbref, self.caller.dbref, self.caller.dbref)
-
-        new_room = create.create_object(typeclass, roomname, report_to=self.caller)
-        new_room.locks.add(lockstring)
-
-        new_room.db.desc = desc
-        new_room.ndb.max_exits = max_exits
-        new_room.ndb.valid_exits = valid_exits
-
-        # Set positional data, if available.
-        new_x, new_y, new_z = room_from.get_nearby_coordinates(direction)
-        new_room.db.x = new_x
-        new_room.db.y = new_y
-        new_room.db.z = new_z
-        
-        # Default tags
-        new_room.tags.add(zonename, category="zones")
-        new_room.tags.add(roomkey, category="room_types")
-        new_room.tags.add(areakey, category="area_types")
-        
-        # Custom tags
-        for tag in tags:
-            new_room.tags.add(tag)
-        
-        # Exits
-        self.create_exits(direction, room_from, new_room)
-        
-        # Objects
-        for object_key, chance in objects.iteritems():
-            # Randomize chance of spawning object. 0 = Never. 1 = Always. Todo: 2+ = Create at least 2+ objects.
-            if random.random() <= chance:
-                
-                # Search for object key in template database
-                if object_key in self.script.db.database["template_objects"]:
-                    self.create_object(object_key, new_room) # We have a match. Create it!
-                    caller.msg("Created object '%s' in room '%s'." % (object_key, roomkey))
-                else:
-                    caller.msg("There's no object with key '%s' as defined in room '%s'." % (object_key, roomkey))
-        
-        return new_room
-    
-    def create_object(self, object_key, location):
-        old_obj = self.script.db.database["template_objects"][object_key]["object"]
-        
-        from game.gamesrc.utils.copy_object_recursive import copy_object_recursive
-        new_obj = copy_object_recursive(old_obj)
-        
-        # Set object location
-        new_obj.home = location
-        new_obj.move_to(location, quiet=True)
-        
-        new_obj.start_scripts()
-        if new_obj.db.is_template:
-            del new_obj.db.is_template
-        
-        return new_obj
-    
-    def create_exits(self, direction, room_from, room_to):
-        lockstring = "control:id(%s) or perm(Immortals); delete:id(%s) or perm(Wizards); edit:id(%s) or perm(Wizards)"
-        lockstring = lockstring % (self.caller.dbref, self.caller.dbref, self.caller.dbref)
-
-        exitshort = direction
-        exitname, backexitshort = self.directions[exitshort]
-        backexitname = self.directions[backexitshort][0]
-        
-        # Create exit to the new room from the current one
-        typeclass = settings.BASE_EXIT_TYPECLASS
-        new_to_exit = create.create_object(typeclass,
-                                           exitname,
-                                           room_from,
-                                           aliases=exitshort,
-                                           locks=lockstring,
-                                           destination=room_to,
-                                           report_to=self.caller)            
-
-
-        # Create exit back from new room
-        new_back_exit = create.create_object(typeclass,
-                                           backexitname,
-                                           room_to,
-                                           aliases=backexitshort,
-                                           locks=lockstring,
-                                           destination=room_from,
-                                           report_to=self.caller)
-    
     def func(self):
         caller = self.caller
         location = caller.location
@@ -391,3 +261,138 @@ class CmdGenerate(MuxCommand):
         
         caller.msg("You generate a new random area {C%s{n, with area key '%s' and zone name '%s'." % (exitname, areakey, zonename))
         location.msg_contents("%s generates a new random area {C%s{n." % (caller.name, exitname), exclude=caller)
+
+
+
+    def create_room(self, direction, room_from):
+        zonename = self.rhs
+        areakey = self.areakey
+        roomname = "untitled room"
+        desc = ""
+        max_exits = 4
+        valid_exits = ['n', 's', 'w', 'e']
+        tags = []
+        objects = {}
+        limit = 0
+        attr = {}
+        
+        # All random room generation stuff
+        roomkey = self.random_roomkeys[int(random.random() * len(self.random_roomkeys))] # Find random room key
+        room_data = self.rooms[roomkey]
+        
+        if "name" in room_data:
+            if isinstance(room_data["name"], basestring):
+                roomname = room_data["name"]
+            else:
+                roomname = room_data["name"][int(random.random() * len(room_data["name"]))] # Find random from list
+        
+        if "desc" in room_data:
+            if isinstance(room_data["desc"], basestring):
+                desc = room_data["desc"]
+            else:
+                desc = room_data["desc"][int(random.random() * len(room_data["desc"]))] # Find random from list
+        
+        if "max_exits" in room_data:
+            max_exits = room_data["max_exits"]
+        
+        if "valid_exits" in room_data:
+            valid_exits = room_data["valid_exits"]
+        
+        if "tags" in room_data:
+            tags = room_data["tags"]
+        
+        if "objects" in room_data:
+            objects = room_data["objects"]
+        
+        if "limit" in room_data:
+            limit = room_data["limit"]
+        
+        typeclass = settings.BASE_ROOM_TYPECLASS
+        lockstring = "control:id(%s) or perm(Immortals); delete:id(%s) or perm(Wizards); edit:id(%s) or perm(Wizards)"
+        lockstring = lockstring % (self.caller.dbref, self.caller.dbref, self.caller.dbref)
+
+        new_room = create.create_object(typeclass, roomname, report_to=self.caller)
+        new_room.locks.add(lockstring)
+
+        new_room.db.desc = desc
+        new_room.ndb.max_exits = max_exits
+        new_room.ndb.valid_exits = valid_exits
+
+        # Set positional data.
+        new_x, new_y, new_z = room_from.get_nearby_coordinates(direction)
+        new_room.db.x = new_x
+        new_room.db.y = new_y
+        new_room.db.z = new_z
+        
+        
+        # Default tags
+        new_room.tags.add(zonename, category="zones")
+        new_room.tags.add(roomkey, category="room_types")
+        new_room.tags.add(areakey, category="area_types")
+        # TODO: Add coordinate area tag, e.g. 0x0x1-10x10x1, to quickly match all rooms within this area. Mostly for utils.get_map
+        
+        # Custom tags
+        for tag in tags:
+            new_room.tags.add(tag)
+        
+        # Exits
+        self.create_exits(direction, room_from, new_room)
+        
+        # Objects
+        for object_key, chance in objects.iteritems():
+            # Randomize chance of spawning object. 0 = Never. 1 = Always. Todo: 2+ = Create at least 2+ objects.
+            if random.random() <= chance:
+                
+                # Search for object key in template database
+                if object_key in self.script.db.database["template_objects"]:
+                    self.create_object(object_key, new_room) # We have a match. Create it!
+                    caller.msg("Created object '%s' in room '%s'." % (object_key, roomkey))
+                else:
+                    caller.msg("There's no object with key '%s' as defined in room '%s'." % (object_key, roomkey))
+        
+        return new_room
+    
+    def create_object(self, object_key, location):
+        old_obj = self.script.db.database["template_objects"][object_key]["object"]
+        
+        from game.gamesrc.utils.copy_object_recursive import copy_object_recursive
+        new_obj = copy_object_recursive(old_obj)
+        
+        # Set object location
+        new_obj.home = location
+        new_obj.move_to(location, quiet=True)
+        
+        new_obj.start_scripts()
+        if new_obj.db.is_template:
+            del new_obj.db.is_template
+        
+        return new_obj
+    
+    def create_exits(self, direction, room_from, room_to):
+        lockstring = "control:id(%s) or perm(Immortals); delete:id(%s) or perm(Wizards); edit:id(%s) or perm(Wizards)"
+        lockstring = lockstring % (self.caller.dbref, self.caller.dbref, self.caller.dbref)
+
+        exitshort = direction
+        exitname, backexitshort = self.directions[exitshort]
+        backexitname = self.directions[backexitshort][0]
+        
+        # Create exit to the new room from the current one
+        typeclass = settings.BASE_EXIT_TYPECLASS
+        new_to_exit = create.create_object(typeclass,
+                                           exitname,
+                                           room_from,
+                                           aliases=exitshort,
+                                           locks=lockstring,
+                                           destination=room_to,
+                                           report_to=self.caller)            
+
+
+        # Create exit back from new room
+        new_back_exit = create.create_object(typeclass,
+                                           backexitname,
+                                           room_to,
+                                           aliases=backexitshort,
+                                           locks=lockstring,
+                                           destination=room_from,
+                                           report_to=self.caller)
+    

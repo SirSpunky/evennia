@@ -38,6 +38,7 @@ def get_map(caller, map_size_x, map_size_y):
         return
     
     # Find all rooms on caller's z-plane (up-and-down plane)
+    # TODO: Need more specific search. This is not fast enough at 1000+ rooms. Probably add tags for larger areas that can easily be searched for.
     rooms = caller.search(caller_z, attribute_name="z", typeclass="game.gamesrc.objects.room.Room", global_search=True, exact=True, quiet=True)
     
     # Select rooms within the map boundaries.
