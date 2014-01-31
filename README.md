@@ -37,18 +37,18 @@ Follow the instructions at https://github.com/evennia/evennia/wiki/Getting-Start
 
 Attributes & tags
 -----------------------
-Attributes are set using the ".attr" command. Tags are set using the ".tag" command. Using in-game help for details.
+Attributes are set using the ".attr" command. Tags are set using the ".tag" command. See in-game help for details.
 
 **Attributes**
-* desc: Description
+* desc: Description.
 * weight: Base weight in kg. Used by all objects. Defaults to 0, which means transparent or infinite, i.e. can never be picked up. Total weight is automatically calculated based on weight and its contents weight.
 * max_contents_weight: Max contents weight in kg. If > 0, is a container. For characters, this sets their inventory size.
 * *Rooms*
-    * x, y and z: These three attributes decide the position of the room, and makes commands like ".dig" easier to use. Should be set to 0, 0, 0 on the initial room and is then updated automatically. Is required for the "map" command to work.
+    * x, y and z: These three attributes decide the position of the room, and make commands like ".dig" easier to use. Should be set to 0, 0, 0 on the initial room and is then updated automatically. Is required for the "map" command to work.
 * *Scripts*
     * random_messages: A list of random messages. Use "/" to execute command instead, e.g. "/say Hello!" to make a character speak at random. The string "$random_character" will be replaced by the name of a random character in the room.
     * random_message_rate: 0-1. Higher means messages will appear more often.
-    * random_movement_rate: 0-1. If > 0, object will move around randomly. Higher means it will move more often.
+    * random_movement_rate: 0-1. If > 0, object will move around randomly. Higher means object will move more often.
     * speech: Speech keywords mapped to answers triggered by using "sayto <character> <keyword>". Example: {"hello": "Hello there!", "bye": "Good bye, my friend."}
 
 **Tags**
