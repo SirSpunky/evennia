@@ -91,7 +91,7 @@ class Object(DefaultObject):
         # Room
         if isinstance(self, Room):
             # Draw mini-map.
-            #string += "\n\n" + get_map(pobject, 10, 5)
+            string += "\n\n" + get_map(pobject, 10, 5)
             
             # Get and identify all visible containing objects
             visible_contents = (con for con in self.contents if con != pobject and
@@ -230,9 +230,14 @@ class Object(DefaultObject):
         
     
     def at_after_move(self, source_location):
+        if not self.db._explored_rooms:
+            self.db._explored_rooms = {}
+        
+        self.db._explored_rooms[self.location.db.xyz] = True
+
         if self.has_player:
             self.execute_cmd('look') # Look around
-        
+            
         # Todo: Look through objects in room. If enemy, take action.
         # Todo: Send hook command to at_object_arrival() to all other objects in room.
     

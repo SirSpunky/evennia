@@ -23,7 +23,10 @@ class CmdMap(MuxCommand):
     def func(self):
         caller = self.caller
         
-        output = get_map(caller, 50, 20)
-        
+        if self.lhs == 'all':
+            output = get_map(caller, 40, 15, True)
+        else:
+            output = get_map(caller, 40, 15, False)
+
         caller.msg(output)
         

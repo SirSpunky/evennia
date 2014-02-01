@@ -83,13 +83,6 @@ class CmdDig(MuxCommand):
         for obj in location.contents:
             if isinstance(obj, Exit) and obj.key == exitname:
                 caller.msg("There's already an exit %s." % exitname)
-                
-                # Fix: Updates coordinates on nearby room
-                #if location.db.x != None and location.db.y != None and location.db.z != None:
-                #    new_x, new_y, new_z = location.get_nearby_coordinates(direction)
-                #    obj.destination.db.x = new_x
-                #    obj.destination.db.y = new_y
-                #    obj.destination.db.z = new_z
                 return
 
         # Check for nearby room in the direction we're digging.
@@ -136,6 +129,7 @@ class CmdDig(MuxCommand):
                 new_room.db.x = new_x
                 new_room.db.y = new_y
                 new_room.db.z = new_z
+                new_room.db.xyz = "%s:%s:%s" % (new_x, new_y, new_z)
 
 
         # Create exit to the new room from the current one

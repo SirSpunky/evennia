@@ -323,7 +323,7 @@ class CmdGenerate(MuxCommand):
         new_room.db.x = new_x
         new_room.db.y = new_y
         new_room.db.z = new_z
-        
+        new_room.db.xyz = "%s:%s:%s" % (new_x, new_y, new_z)
         
         # Default tags
         new_room.tags.add(zonename, category="zones")
