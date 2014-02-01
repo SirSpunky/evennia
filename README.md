@@ -15,7 +15,7 @@ Screenshots: http://imgur.com/a/uN5mB#0
     * Exits optimized for north, east, south, west, up and down for easier orientation.
     * Coordinates (x, y and z) have been added to rooms for extra functionality.
     * In-game map using the "map" command. Only shows explored rooms by default, but can use "map all" to show all rooms for debugging purposes.
-    * Custom formatting of room descriptions when using the "look" command, including an optional mini-map.
+    * Custom formatting of room descriptions when using the "look" command, including a mini-map of explored rooms.
 * Objects
     * Weight-based object and container system. Containers can contain any levels of sub-containers and objects, as long as they haven't reached their maximum contents weight.
     * Containers and exits support opening and closing, to create things like chests and doors.
