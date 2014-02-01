@@ -259,7 +259,7 @@ class Object(TypeClass):
                location=location,
                attribute_name=attribute_name,
                quiet=quiet,
-               exact=quiet)
+               exact=exact)
 
     def execute_cmd(self, raw_string, sessid=None):
         """
@@ -902,7 +902,6 @@ class Character(Object):
         if self.location:
             # save location again to be sure
             self.db.prelogout_location = self.location
-            self.location.msg_contents("%s has entered the game." % self.name, exclude=[self])
             self.location.at_object_receive(self, self.location)
         else:
             player.msg("{r%s has no location and no home is set.{n" % self, sessid=sessid)
