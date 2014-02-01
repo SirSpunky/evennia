@@ -14,7 +14,7 @@ Screenshots: http://imgur.com/a/uN5mB#0
 * Rooms
     * Exits optimized for north, east, south, west, up and down for easier orientation.
     * Coordinates (x, y and z) have been added to rooms for extra functionality.
-    * In-game map using the "map" command.
+    * In-game map using the "map" command. Only shows explored rooms by default, but can use "map all" to show all rooms for debugging purposes.
     * Custom formatting of room descriptions when using the "look" command, including an optional mini-map.
 * Objects
     * Weight-based object and container system. Containers can contain any levels of sub-containers and objects, as long as they haven't reached their maximum contents weight.
@@ -44,7 +44,7 @@ Attributes are set using the ".attr" command. Tags are set using the ".tag" comm
 * weight: Base weight in kg. Used by all objects. Defaults to 0, which means transparent or infinite, i.e. can never be picked up. Total weight is automatically calculated based on weight and its contents weight.
 * max_contents_weight: Max contents weight in kg. If > 0, is a container. For characters, this sets their inventory size.
 * *Rooms*
-    * x, y and z: These three attributes decide the position of the room, and make commands like ".dig" easier to use. Should be set to 0, 0, 0 on the initial room and is then updated automatically. Is required for the "map" command to work.
+    * x, y, z and xyz: These attributes decide the position of the room, and make commands like ".dig" easier to use. Should be set to 0, 0, 0 and 0:0:0 on the initial room and is then updated automatically. Is required for the "map" command to work.
 * *Scripts*
     * random_messages: A list of random messages. Use "/" to execute command instead, e.g. "/say Hello!" to make a character speak at random. The string "$random_character" will be replaced by the name of a random character in the room.
     * random_message_rate: 0-1. Higher means messages will appear more often.
