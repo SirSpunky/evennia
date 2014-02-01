@@ -97,19 +97,19 @@ Remove and add global script:
         
         # Wind - Messages
         if self.db.wind_speed == 3 and random.random() < 0.005:
-            messages = ["A fresh breeze is blowing.", "You feel the wind blowing around you.", "A strong breeze can be felt."]
+            messages = ["A fresh breeze is blowing.", "You feel the wind blowing around you.", "There's a strong breeze in the air."]
             msg = messages[int(random.random() * len(messages))]
         
         if self.db.wind_speed == 4 and random.random() < 0.025: # Every 5 minutes on average
-            messages = ["The wind whines around you.", "Strong winds swirl around you.", "A gust of wind stirs the air.", "The wind rumbles as it picks up in strength, only to quiet down again."]
+            messages = ["The wind whines around you.", "Strong winds swirl around you.", "A strong gust of wind stirs the air."]
             msg = messages[int(random.random() * len(messages))]
 
         if (self.db.wind_speed == 5 or self.db.wind_speed == 6) and random.random() < 0.2:
-            messages = ["Storm winds are howling around you.", "A strong gust of wind almost throws you off-balance.", "Very strong winds are hitting hard against you.", "Storm winds are racing through the air."]
+            messages = ["Storm winds are howling around you.", "A strong gust of wind almost throws you off-balance.", "Strong winds are hitting you hard.", "Storm winds are racing through the air."]
             msg = messages[int(random.random() * len(messages))]
 
         if self.db.wind_speed == 7 and random.random() < 0.3:
-            messages = ["Hurricane winds are raging against you.", "Extreme winds are throwing things around.", "Terrible winds are creating havoc around you.", "Hurricane winds are ripping through the air."]
+            messages = ["Hurricane winds are raging against you.", "Extreme winds are throwing things around.", "Terrible winds are creating havoc around you.", "Hurricane winds rip through the air."]
             msg = messages[int(random.random() * len(messages))]
 
         
