@@ -20,7 +20,7 @@ this change, you have to convert them manually e.g. with the
 """
 from ev import Object as DefaultObject
 from ev import utils
-        
+import ev
 
 #from game.gamesrc.commands.cmdset import MinimumCommands
 
@@ -92,6 +92,10 @@ class Object(DefaultObject):
         if isinstance(self, Room):
             # Draw mini-map.
             string += "\n\n" + get_map(pobject, 10, 5)
+            
+            # For debugging pathfinding
+            #from game.gamesrc.utils.get_path import get_path
+            #string += "\n\n" + ", ".join(get_path(self, ev.search_object("#78")[0]))
             
             # Get and identify all visible containing objects
             visible_contents = (con for con in self.contents if con != pobject and
