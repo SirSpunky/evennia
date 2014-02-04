@@ -22,6 +22,7 @@ from game.gamesrc.commands.time import CmdTime
 from game.gamesrc.commands.weather import CmdWeather
 from game.gamesrc.commands.emote import CmdEmote
 from game.gamesrc.commands.map import CmdMap
+from game.gamesrc.commands.attack import CmdAttack
 
 from game.gamesrc.commands.admin.dig import CmdDig
 from game.gamesrc.commands.admin.scriptattr import CmdScriptattr
@@ -69,6 +70,7 @@ class CharacterCmdSet(CmdSet):
         self.add(CmdWeather())
         self.add(CmdEmote())
         self.add(CmdMap())
+        self.add(CmdAttack())
         self.add(general.CmdLook())
         #self.add(general.CmdPose())
         self.add(general.CmdNick())

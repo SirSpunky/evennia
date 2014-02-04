@@ -62,7 +62,7 @@ class CmdGet(MuxCommand):
             caller.msg("You cannot pick that up.")
             return
         if obj.total_weight > caller.max_pickup_weight:
-            caller.msg("It's too heavy for you.")
+            caller.msg("That is too heavy for you.")
             return
         if obj.total_weight + caller.contents_weight > caller.max_contents_weight:
             caller.msg("It won't fit in your inventory.")

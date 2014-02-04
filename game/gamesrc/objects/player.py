@@ -35,4 +35,6 @@ class Player(DefaultPlayer):
           handles the sessid).
         kwargs - extra data to send through protocol
                  """
-        self.dbobj.msg(text=text+"\n", from_obj=from_obj, sessid=sessid, **kwargs)
+        
+        suffix = "\n\n>"
+        self.dbobj.msg(text=text+suffix, from_obj=from_obj, sessid=sessid, **kwargs)

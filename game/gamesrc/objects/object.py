@@ -310,8 +310,46 @@ class Object(DefaultObject):
             string = "%s arrives from the %s." % (self.name_upper, exit.name)
         self.location.msg_contents(string, exclude=self)
         
-        
 
+        
+    #------------------- Attacking -------------------#
+    @property
+    def reaction_time(self): # In seconds
+        return 0.5
+    
+    @property
+    def recovery_time(self): # In seconds
+        return 10
+    
+    def attack(self, target):
+        if not self.location == target.location:
+            return
+        
+        # If we're still recovering, wait additional time.
+        #if self.ndb.recovery_time:
+        #    utils.delay(self.ndb.recovery_time, target, self.attack)
+        #    return
+
+        # Set current target
+        if self.ndb.current_target != target:
+            self.ndb.current_target = target
+        
+        # Make attack
+        self.msg('You swing your fist at %s.' % (target.name))
+        target.msg('%s swings %s fist at you.' % (self.name_upper, self.his))
+        self.ndb.recovery_time = 10
+        
+        # Let enemy react
+        utils.delay(target.reaction_time, self, target.at_is_attacked)
+        
+        # Prepare next auto-attack
+        utils.delay(self.ndb.recovery_time, target, self.attack)
+    
+    # Hook for when object is attacked.
+    def at_is_attacked(self, target):
+        if self.ndb.current_target != target:
+            self.attack(target)
+    
     #------------------- Weight -------------------#
     @property
     def max_contents_weight(self):
@@ -413,3 +451,32 @@ class Object(DefaultObject):
     @property
     def name_upper(self):
         return "{x" + self.key[0].upper() + self.key[1:] + "{n"
+
+        
+    #------------------- Gender -------------------#
+    @property
+    def he(self):
+        if self.db.gender == 'male':
+            return 'he'
+        elif self.db.gender == 'female':
+            return 'she'
+        else:
+            return 'it'
+        
+    @property
+    def his(self):
+        if self.db.gender == 'male':
+            return 'his'
+        elif self.db.gender == 'female':
+            return 'her'
+        else:
+            return 'its'
+    
+    @property
+    def him(self):
+        if self.db.gender == 'male':
+            return 'him'
+        elif self.db.gender == 'female':
+            return 'her'
+        else:
+            return 'it'
