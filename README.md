@@ -47,8 +47,8 @@ Attributes are set using the ".attr" command. Tags are set using the ".tag" comm
     * x, y, z and xyz: These attributes decide the position of the room, and make commands like ".dig" easier to use. Should be set to 0, 0, 0 and 0:0:0 on the initial room and is then updated automatically. Is required for the "map" command to work.
 * *Scripts*
     * random_messages: A list of random messages. Use "/" to execute command instead, e.g. "/say Hello!" to make a character speak at random. The string "$random_character" will be replaced by the name of a random character in the room.
-    * random_message_rate: 0-1. Higher means messages will appear more often.
-    * random_movement_rate: 0-1. If > 0, object will move around randomly. Higher means object will move more often.
+    * random_message_interval: Delay in seconds between random messages. Can also be a list of two values, e.g. [30, 60] means that the interval will be randomized between 30-60 seconds.
+    * random_movement_interval: Delay in seconds between random movement. If > 0, object will move around randomly. Can also be a list of two values, e.g. [30, 60] means that the interval will be randomized between 30-60 seconds.
     * speech: Speech keywords mapped to answers triggered by using "sayto <character> <keyword>". Example: {"hello": "Hello there!", "bye": "Good bye, my friend."}
 
 **Tags**
