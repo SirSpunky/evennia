@@ -20,3 +20,13 @@ class CmdReload(CmdReloadDefault):
     aliases = [".rel",".restart",".res",".r"]
     locks = "cmd:perm(reload) or perm(Immortals)"
     help_category = "System"
+
+    #def func(self):
+    #    """
+    #    Reload the system.
+    #    """
+    #    reason = ""
+    #    if self.args:
+    #        reason = "(Reason: %s) " % self.args.rstrip(".")
+    #    SESSIONS.announce_all(" Server restarting %s..." % reason)
+    #    SESSIONS.server.shutdown(mode='reload')

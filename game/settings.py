@@ -32,6 +32,8 @@ CMDSET_CHARACTER = "game.gamesrc.cmdsets.cmdset_character.CharacterCmdSet"
 # Command set for players without a character (ooc)
 CMDSET_PLAYER = "game.gamesrc.cmdsets.cmdset_player.PlayerCmdSet"
 
+AT_SERVER_STARTSTOP_MODULE = "game.gamesrc.conf.at_server_startstop"
+
 SEARCH_AT_RESULT = "game.gamesrc.comms.cmdparser.at_search_result"
 CONNECTION_SCREEN_MODULE = "game.gamesrc.comms.connection_screen"
 

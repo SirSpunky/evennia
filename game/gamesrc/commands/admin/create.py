@@ -103,6 +103,7 @@ class CmdCreate(MuxCommand):
             old_obj = script.db.database["template_objects"][target]["object"]
             
             from game.gamesrc.utils.copy_object_recursive import copy_object_recursive
+            
             new_obj = copy_object_recursive(old_obj)
             
             # Set object location

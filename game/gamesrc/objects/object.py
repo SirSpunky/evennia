@@ -18,25 +18,18 @@ this change, you have to convert them manually e.g. with the
 @typeclass command.
 
 """
+import random
+import ev
+import time
+
 from ev import Object as DefaultObject
 from ev import utils
-import ev
+
+from game.gamesrc.utils.delay import delay
 
 #from game.gamesrc.commands.cmdset import MinimumCommands
 
 class Object(DefaultObject):
-    #def at_init(self):
-    #    """
-    #    This is always called whenever this object is initiated --
-    #    that is, whenever it its typeclass is cached from memory. This
-    #    happens on-demand first time the object is used or activated
-    #    in some way after being created but also after each server
-    #    restart or reload.
-    #    """
-    #
-    #    #self.cmdset.add_default(MinimumCommands, permanent=True)
-    #    #self.cmdset.delete(MinimumCommands)
-
 
     #------------------- Looking -------------------#
     def return_appearance(self, pobject):
@@ -209,28 +202,118 @@ class Object(DefaultObject):
     
     #------------------- Scripts -------------------#
     def start_scripts(self):
-        self.stop_scripts()
-        if self.db.random_messages:
-            from game.gamesrc.scripts.randommessage import RandomMessage
-            self.scripts.add(RandomMessage)
+        self.ndb.script_session = time.time() # Script session is set to current time.
         
-        if self.db.random_movement_rate:
-            from game.gamesrc.scripts.randommovement import RandomMovement
-            self.scripts.add(RandomMovement)
+        if not self.location:
+            return
         
-        for content in self.contents:
-            content.start_scripts()
+        has_script = False
+        
+        if self.db.random_message_interval and self.db.random_messages:
+            try: # Interval is an int
+                delay(self.db.random_message_interval + random.random() * self.db.random_message_interval, self.repeated_message, self.ndb.script_session)
+            except TypeError: # Interval is a list of min and max range
+                delay(self.db.random_message_interval[0] + random.random() * self.db.random_message_interval[1] + random.random() * self.db.random_message_interval[0], self.repeated_message, self.ndb.script_session)
+            has_script = True
+        
+        if self.db.random_movement_interval:
+            try: # Interval is an int
+                delay(self.db.random_movement_interval + random.random() * self.db.random_movement_interval, self.repeated_move, self.ndb.script_session)
+            except TypeError: # Interval is a list of min and max range
+                delay(self.db.random_movement_interval[0] + random.random() * self.db.random_movement_interval[1] + random.random() * self.db.random_movement_interval[0], self.repeated_move, self.ndb.script_session)
+            has_script = True
+        
+        self.db._has_script = has_script
     
     def stop_scripts(self):
-        for script in self.scripts.all():
-            script.stop()
+        self.ndb.script_session = None # Script session set to None so that all future scripts will be stopped.
+    
+    def repeated_move(self, script_session):
+        if self.ndb.script_session != script_session:
+            return # Script session is no longer valid. Abort script.
+        
+        self.move_in_random_direction()
+        
+        # Repeat
+        if self.db.random_movement_interval:
+            try: # Interval is an int
+                delay(self.db.random_movement_interval, self.repeated_move, self.ndb.script_session)
+            except TypeError: # Interval is a list of min and max range
+                delay(self.db.random_movement_interval[0] + random.random() * self.db.random_movement_interval[1], self.repeated_move, self.ndb.script_session)
 
+    def repeated_message(self, script_session):
+        if self.ndb.script_session != script_session:
+            return # Script session is no longer valid. Abort script.
+        
+        self.show_random_message(self.db.random_messages)
+        
+        # Repeat
+        if self.db.random_message_interval and self.db.random_message_interval:
+            try: # Interval is an int
+                delay(self.db.random_message_interval, self.repeated_message, self.ndb.script_session)
+            except TypeError: # Interval is a list of min and max range
+                delay(self.db.random_message_interval[0] + random.random() * self.db.random_message_interval[1], self.repeated_message, self.ndb.script_session)
+
+    # Move in random direction
+    def move_in_random_direction(self):
+        if not self.location:
+            return
+        
+        from game.gamesrc.objects.exit import Exit
+    
+        valid_exits = []
+        for obj in self.location.exits:
+            if obj.is_open:
+                valid_exits.append(obj)
+        
+        if len(valid_exits) > 0:
+            rand = int(random.random() * len(valid_exits))
+            self.move_to(valid_exits[rand].destination)
+            return
+        
+
+    # Return a random message
+    def show_random_message(self, messages):
+        if len(messages) == 0:
+            return
+        
+        chance_per_message = 1.0/len(messages)
+        
+        i = 0
+        for msg in messages:
+            i += 1
+            if random.random() <= i*chance_per_message:
+                # $random_character is replaced with random character in room, excluding caller, if one is available.
+                if msg.find('$random_character') != -1:
+                    from game.gamesrc.objects.character import Character
+                    chars = []
+                    for obj in self.location.contents:
+                        if isinstance(obj, Character) and obj != self:
+                            chars.append(obj)
+                    if len(chars) == 0:
+                        return # If no chars were found, skip message.
+                    r = int(random.random() * len(chars))
+                    random_char = chars[r]
+                    msg = msg.replace("$random_character", random_char.name);
+                
+                # Prefix string with "/" to execute command instead of displaying message.
+                if msg[0] == "/":
+                    self.execute_cmd(msg[1:])
+                else:
+                    if self.location:
+                        self.location.msg_contents(msg)
+                    else:
+                        self.msg_contents(msg)
+                return
+
+    
+    
     #------------------- Hooks -------------------#
     def at_sayto(self, caller, msg):
         if self.db.speech:
             for keyword, answer in self.db.speech.iteritems():
                 if msg.lower().find(keyword.lower()) != -1:
-                    return utils.delay(1, 'sayto %s = %s' % (caller.key, answer), self.execute_cmd)
+                    return delay(1, self.execute_cmd, 'sayto %s = %s' % (caller.key, answer))
         
     
     def at_after_move(self, source_location):
@@ -312,14 +395,10 @@ class Object(DefaultObject):
         
 
         
-    #------------------- Attacking -------------------#
+    #------------------- Melee combat -------------------#
     @property
-    def reaction_time(self): # In seconds
-        return 0.5
-    
-    @property
-    def recovery_time(self): # In seconds
-        return 10
+    def reaction_time(self): # In seconds. Should be calculated from agility. Used when responding to actions, e.g. following a fleeing enemy.
+        return 1
     
     def attack(self, target):
         if not self.location == target.location:
@@ -328,7 +407,7 @@ class Object(DefaultObject):
         # If we're still recovering, wait additional time.
         #if self.ndb.recovery_time:
         #    utils.delay(self.ndb.recovery_time, target, self.attack)
-        #    return
+        #    return False
 
         # Set current target
         if self.ndb.current_target != target:
@@ -344,11 +423,12 @@ class Object(DefaultObject):
         
         # Prepare next auto-attack
         utils.delay(self.ndb.recovery_time, target, self.attack)
+        return True
     
-    # Hook for when object is attacked.
-    def at_is_attacked(self, target):
-        if self.ndb.current_target != target:
-            self.attack(target)
+    # Hook for when object is attacked by another object.
+    def at_is_attacked(self, attacker):
+        if self.ndb.current_target != attacker:
+            self.attack(attacker)
     
     #------------------- Weight -------------------#
     @property
@@ -452,8 +532,8 @@ class Object(DefaultObject):
     def name_upper(self):
         return "{x" + self.key[0].upper() + self.key[1:] + "{n"
 
-        
-    #------------------- Gender -------------------#
+    
+    #------------------- Gender grammatics -------------------#
     @property
     def he(self):
         if self.db.gender == 'male':
@@ -480,3 +560,12 @@ class Object(DefaultObject):
             return 'her'
         else:
             return 'it'
+
+    @property
+    def himself(self):
+        if self.db.gender == 'male':
+            return 'himself'
+        elif self.db.gender == 'female':
+            return 'herself'
+        else:
+            return 'itself'
