@@ -70,6 +70,8 @@ class CmdDb(MuxCommand):
 
         
         if command == "delete":
+            # Delete
+            
             if not target:
                 self.caller.msg("Which template do you wish to delete?")
                 return
@@ -91,6 +93,8 @@ class CmdDb(MuxCommand):
             self.caller.msg("Template '%s' was deleted." % target)
         
         elif command == "add":
+            # Add
+            
             if not target:
                 self.caller.msg("Which object do you wish to add?")
                 return
@@ -132,6 +136,8 @@ class CmdDb(MuxCommand):
             self.caller.msg("Template '%s' was added." % key)
         
         else:
+            # View
+            
             filter = ''
             
             if command != "list" and not target:
@@ -150,7 +156,7 @@ class CmdDb(MuxCommand):
             # Draw table
             from src.utils import utils, prettytable
         
-            table = prettytable.PrettyTable(["Name", "Type", "Desc"])
+            table = prettytable.PrettyTable(["Name", "Type", "Count", "Desc"])
             table.header = True
             table.border = False
             for key, item in script.db.database["template_objects"].iteritems():
@@ -166,6 +172,8 @@ class CmdDb(MuxCommand):
                 else:
                     color = "{x"
                 
-                table.add_row([color + key + "{n", color + item["type"] + "{n", "{W" + item["desc"] + "{n"])
+                count = ObjectDB.objects.filter(db_key=key).count() - 1 # Subtract 1 for the template object with location = None
+                
+                table.add_row([color + key + "{n", color + item["type"] + "{n", count, "{W" + item["desc"] + "{n"])
             
             self.caller.msg("Templates:\n\n%s" % unicode(table))

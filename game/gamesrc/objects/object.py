@@ -332,9 +332,10 @@ class Object(DefaultObject):
     
     def at_after_move(self, source_location):
         if not self.db._explored_rooms:
-            self.db._explored_rooms = {}
+            self.db._explored_rooms = []
         
-        self.db._explored_rooms[self.location.db.xyz] = True
+        if not self.location.db.xyz in self.db._explored_rooms:
+            self.db._explored_rooms.append(self.location.db.xyz)
 
         if self.has_player:
             self.execute_cmd('look') # Look around
