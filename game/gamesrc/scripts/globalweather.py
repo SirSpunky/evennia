@@ -43,7 +43,7 @@ Remove and add global script:
         self.db.cloud_increase_rate = 1 # The higher it is, increases in strength will happen more often.
         self.db.wind_change_rate = 0.1 # The higher it is, changes will happen more often.
         self.db.wind_increase_rate = 1 # The higher it is, increases in strength will happen more often.
-        self.db.precipitation_change_rate = 0.5 # The higher it is, changes will happen more often.
+        self.db.precipitation_change_rate = 0.25 # The higher it is, changes will happen more often.
         self.db.precipitation_increase_rate = 0 # The higher it is, increases in strength will happen more often. Set automatically depending on cloud density.
         self.db.precipitation_msg_timer = 0 # An automatic timer constantly ticking up.
 

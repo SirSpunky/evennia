@@ -255,18 +255,32 @@ class Object(DefaultObject):
                 delay(self.db.random_message_interval[0] + random.random() * self.db.random_message_interval[1], self.repeated_message, self.ndb.script_session)
 
     # Move in random direction
-    def move_in_random_direction(self):
+    def move_in_random_direction(self):        
         if not self.location:
             return
         
         from game.gamesrc.objects.exit import Exit
-    
+
+        all_exits = []
         valid_exits = []
+        
+        # Required tags can be either a tag name or a list of tag names.
+        required_tags = self.db.random_movement_constraint if not isinstance(self.db.random_movement_constraint, basestring) else [self.db.random_movement_constraint]
+        
         for obj in self.location.exits:
             if obj.is_open:
-                valid_exits.append(obj)
+                all_exits.append(obj)
+                
+                # Add to valid exits if we have no required tags, of if destination room has at least one of these tags.
+                if not required_tags or any(tag in obj.destination.tags.all() for tag in required_tags):
+                    valid_exits.append(obj)
+        
+        # If there are no valid exits, we choose from all exits.
+        if len(valid_exits) == 0:
+            valid_exits = all_exits
         
         if len(valid_exits) > 0:
+            # Pick random room from valid exits and move to it.
             rand = int(random.random() * len(valid_exits))
             self.move_to(valid_exits[rand].destination)
             return
@@ -333,6 +347,12 @@ class Object(DefaultObject):
         pass
     
     #------------------- Movement -------------------#
+    #def travel_to(target_room, interval):
+        # Travel to <target_room> using pathfinding. Wait <interval> seconds between each movement.
+    #    self.db._travel_to_room = target_room
+    #    self.db._travel_to_interval = interval
+    
+    
     def find_exit_between_rooms(self, room1, room2):
         from game.gamesrc.objects.exit import Exit
         

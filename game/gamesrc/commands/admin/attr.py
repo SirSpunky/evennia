@@ -119,6 +119,8 @@ class CmdAttr(ObjManipCommand):
             # nested lists/dicts)
             return rec_convert(strobj.strip())
 
+
+
     def func(self):
         "Implement the set attribute - a limited form of @py."
 
@@ -143,16 +145,22 @@ class CmdAttr(ObjManipCommand):
         if not value:
             if self.rhs is None:
                 # no = means we inspect the attribute(s)
+                show_all = False
                 if not attrs:
                     attrs = [attr.key for attr in obj.attributes.all()]
+                elif attrs[0] == 'all':
+                    attrs = [attr.key for attr in obj.attributes.all()]
+                    show_all = True
+                attrs.sort()
                 for attr in attrs:
-                    if obj.attributes.has(attr):
-                        value = obj.attributes.get(attr)
-                        if isinstance(value, basestring):
-                            value = '"%s"' % value
-                        string += "\nAttribute %s/%s = %s" % (obj, attr, value)
-                    else:
-                        string += "\n%s has no attribute '%s'." % (obj, attr)
+                    if attr[0] != "_" or show_all: # We hide all variables with prefix "_" unless they supply the /all argument.
+                        if obj.attributes.has(attr):
+                            value = obj.attributes.get(attr)
+                            if isinstance(value, basestring):
+                                value = '"%s"' % value
+                            string += "\nAttribute %s/%s = %s" % (obj, attr, value)
+                        else:
+                            string += "\n%s has no attribute '%s'." % (obj, attr)
                     # we view it without parsing markup.
                 self.caller.msg(string.strip(), raw=True)
                 return
